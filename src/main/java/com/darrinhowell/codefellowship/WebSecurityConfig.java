@@ -1,4 +1,4 @@
-package WebSecurity;
+package com.darrinhowell.codefellowship;
 
 // import com.ferreirae.securedemo.appuser.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
