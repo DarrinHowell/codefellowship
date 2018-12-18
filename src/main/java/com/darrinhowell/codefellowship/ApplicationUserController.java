@@ -1,6 +1,7 @@
 package com.darrinhowell.codefellowship;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,6 +12,9 @@ import org.springframework.web.servlet.view.RedirectView;
 public class ApplicationUserController {
     @Autowired
     public ApplicationUserRepository appUserRepo;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showSplash(){
@@ -27,7 +31,10 @@ public class ApplicationUserController {
                                  @RequestParam String lastName,
                                  @RequestParam String dateOfBirth,
                                  @RequestParam String bio) {
-        ApplicationUser newUser = new ApplicationUser(username, password, firstName, lastName, dateOfBirth, bio);
+        
+        String hashedPassword = bCryptPasswordEncoder.encode(password);
+        ApplicationUser newUser = new ApplicationUser(username, hashedPassword, firstName, lastName, dateOfBirth, bio);
+
         appUserRepo.save(newUser);
         return new RedirectView("/sign-up");
     }
