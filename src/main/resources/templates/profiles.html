@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>CodeFellowship</title>
+</head>
+<body>
+<header>
+    <h1>User Profiles</h1>
+</header>
+<main>
+    <ul>
+        <li th:each="profile : ${profiles}">
+            <a href="${'/users/'+profile.id+'/show'}"><p th:text="${profile.username}"></p></a>
+            <p th:text="${profile.bio}"></p>
+        </li>
+    </ul>
+
+    <a href="/index">Home</a>
+
+</main>
+<footer>
+
+</footer>
+</body>
+</html>
