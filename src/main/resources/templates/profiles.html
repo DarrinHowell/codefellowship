@@ -11,12 +11,12 @@
 <main>
     <ul>
         <li th:each="profile : ${profiles}">
-            <a href="${'/users/'+profile.id+'/show'}"><p th:text="${profile.username}"></p></a>
+            <a th:href="${'/users/'+profile.id+'/show'}"><p th:text="${profile.username}"></p></a>
             <p th:text="${profile.bio}"></p>
         </li>
     </ul>
 
-    <a href="/index">Home</a>
+    <a href="/">Home</a>
 
 </main>
 <footer>
