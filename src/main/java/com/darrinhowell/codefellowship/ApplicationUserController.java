@@ -1,6 +1,9 @@
 package com.darrinhowell.codefellowship;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.ArrayList;
 
 @Controller
 public class ApplicationUserController {
@@ -34,7 +39,7 @@ public class ApplicationUserController {
 
     @RequestMapping(value = "/users/{profileId}/show", method = RequestMethod.GET)
     public String getProfiles(@PathVariable long profileId, Model m){
-        m.addAttribute("profiles", appUserRepo.findById(profileId));
+        m.addAttribute("profiles", appUserRepo.findById(profileId).get());
         return "individualProfile";
     }
 
@@ -50,8 +55,12 @@ public class ApplicationUserController {
         String hashedPassword = bCryptPasswordEncoder.encode(password);
         ApplicationUser newUser = new ApplicationUser(username, hashedPassword, firstName, lastName, dateOfBirth, bio);
 
+        Authentication authentication = new UsernamePasswordAuthenticationToken(newUser, null,
+                new ArrayList<>());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         appUserRepo.save(newUser);
-        return new RedirectView("/sign-up");
+        return new RedirectView("/");
     }
 
 }
