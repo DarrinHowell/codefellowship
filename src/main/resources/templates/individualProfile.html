@@ -2,28 +2,30 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <div th:replace="common :: link"></div>
+    <div th:replace="common :: styles"></div>
     <title>CodeFellowship</title>
 </head>
 <body>
-<header>
-    <h1>User Profiles</h1>
-</header>
-<main>
-    <ul>
-        <li th:each="individual : ${profiles}">
-            <p th:text="${individual.username}"></p>
-            <p th:text="${individual.firstName}"></p>
-            <p th:text="${individual.lastName}"></p>
-            <p th:text="${individual.dateOfBirth}"></p>
-            <p th:text="${individual.bio}"></p>
-        </li>
-    </ul>
+    <header>
+        <div th:replace="common :: nav"></div>
+        <h1>User Profiles</h1>
+    </header>
+    <main>
 
-    <a href="/profiles">User Profiles</a>
+        <img src="/ben-sweet-456320-unsplash.jpg"/>
 
-</main>
-<footer>
+        <ul>
+            <li th:text="${profile.username}"></li>
+            <li th:text="${profile.firstName}"></li>
+            <li th:text="${profile.lastName}"></li>
+            <li th:text="${profile.dateOfBirth}"></li>
+            <li th:text="${profile.bio}"></li>
+        </ul>
 
-</footer>
+    </main>
+    <footer>
+
+    </footer>
 </body>
 </html>

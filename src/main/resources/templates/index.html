@@ -2,10 +2,13 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <div th:replace="common :: link"></div>
+    <div th:replace="common :: styles"></div>
     <title>CodeFellowship</title>
 </head>
 <body>
     <header>
+        <div th:replace="common :: nav"></div>
         <h1>Welcome to Code Fellowship</h1>
     </header>
     <main>
@@ -15,15 +18,11 @@
         arsenal, including the people around you.</p>
 
         <p>This web app exists to connect fellow bootcamp trainees in their path<br/>
-        through code fellows and beyond. Sign up below to connect, share resources, <br/>
+        through code fellows and beyond. <a href="/sign-up">Sign up here</a> to connect, share resources, <br/>
         and commiserate. Hoo-ah!</p>
-
-        <div><a href="/sign-up">Sign-Up Here</a></div>
-        <div><a href="/profiles">User Profiles</a></div>
 
     </main>
     <footer>
-
     </footer>
 </body>
 </html>
