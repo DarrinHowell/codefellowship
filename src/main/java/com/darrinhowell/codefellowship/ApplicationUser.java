@@ -3,11 +3,10 @@ package com.darrinhowell.codefellowship;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class ApplicationUser implements UserDetails {
@@ -21,6 +20,17 @@ public class ApplicationUser implements UserDetails {
     public String lastName;
     public String dateOfBirth;
     public String bio;
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "FollowUserTable",
+            joinColumns = {@JoinColumn(name = "follower")},
+            inverseJoinColumns = {@JoinColumn(name = "userBeingFollowed")}
+    )
+    Set<ApplicationUser> followerSet = new HashSet<>();
+
+    Set<ApplicationUser> userBeingFollowedSet = new HashSet<>();
+
 
     public ApplicationUser (String username, String password, String firstName, String lastName,
                            String dateOfBirth, String bio) {
