@@ -31,15 +31,15 @@ public class ApplicationUserController {
     @RequestMapping(value = "/sign-up", method = RequestMethod.GET)
     public String showSignUp() { return "sign-up"; }
 
-    @RequestMapping(value = "/profiles", method = RequestMethod.GET)
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
     public String getProfiles(Model m){
         m.addAttribute("profiles", appUserRepo.findAll());
-        return "profiles";
+        return "users";
     }
 
     @RequestMapping(value = "/users/{profileId}/show", method = RequestMethod.GET)
     public String getProfiles(@PathVariable long profileId, Model m){
-        m.addAttribute("profiles", appUserRepo.findById(profileId).get());
+        m.addAttribute("profile", appUserRepo.findById(profileId).get());
         return "individualProfile";
     }
 
