@@ -6,26 +6,24 @@
     <title>CodeFellowship</title>
 </head>
 <body>
-<header>
-    <div th:replace="common :: nav"></div>
-    <h1>Login</h1>
-</header>
-<main>
+    <header>
+        <div th:replace="common :: nav"></div>
+        <h1>Login</h1>
+    </header>
+    <main>
 
-    <form action="/perform_login" method="post">
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username">
+        <form action="/perform_login" method="post">
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username">
 
-        <label for="password">Password:</label>
-        <input type="text" name="password" id="password">
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password">
 
-        <input type="submit">
-    </form>
+            <input type="submit">
+        </form>
 
-    <a href="/index"> Home </a>
-</main>
-<footer>
-
-</footer>
+    </main>
+    <footer>
+    </footer>
 </body>
 </html>

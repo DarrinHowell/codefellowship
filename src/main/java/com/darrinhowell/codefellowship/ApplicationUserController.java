@@ -31,6 +31,9 @@ public class ApplicationUserController {
     @RequestMapping(value = "/sign-up", method = RequestMethod.GET)
     public String showSignUp() { return "sign-up"; }
 
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String showLogin() { return "login"; }
+
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public String getProfiles(Model m){
         m.addAttribute("profiles", appUserRepo.findAll());
