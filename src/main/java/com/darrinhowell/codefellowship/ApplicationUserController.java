@@ -62,8 +62,12 @@ public class ApplicationUserController {
                 new ArrayList<>());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        RedirectView view = new RedirectView();
+
+
         appUserRepo.save(newUser);
         return new RedirectView("/");
+
     }
 
 }
