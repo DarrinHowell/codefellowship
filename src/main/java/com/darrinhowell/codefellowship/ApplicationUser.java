@@ -27,9 +27,10 @@ public class ApplicationUser implements UserDetails {
             joinColumns = {@JoinColumn(name = "follower")},
             inverseJoinColumns = {@JoinColumn(name = "userBeingFollowed")}
     )
-    Set<ApplicationUser> followerSet = new HashSet<>();
+    Set<ApplicationUser> followerSet;
 
-    Set<ApplicationUser> userBeingFollowedSet = new HashSet<>();
+    @ManyToMany(mappedBy = "followerSet")
+    Set<ApplicationUser> userBeingFollowedSet;
 
 
     public ApplicationUser (String username, String password, String firstName, String lastName,
