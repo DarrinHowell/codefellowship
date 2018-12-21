@@ -1,13 +1,20 @@
 package com.darrinhowell.codefellowship;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
 public class Post {
-    String body;
-    Date recordedAt;
-    ApplicationUser author;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public long id;
+    public String body;
+    public Date recordedAt;
+    public ApplicationUser author;
 
     public Post() {}
 
