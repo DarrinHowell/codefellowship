@@ -68,10 +68,10 @@ public class ApplicationUserController {
 
     }
 
-//    @GetMapping("/myProfile")
-//    public String getLoggedInUser(Principal p, Model m){
-//        m.addAttribute("profile", ((UsernamePasswordAuthenticationToken)p).getPrincipal());
-//        return "individualProfile";
-//    }
+    @GetMapping("/myProfile")
+    public String getLoggedInUser(Principal p, Model m){
+        m.addAttribute("profile", ((UsernamePasswordAuthenticationToken)p).getPrincipal());
+        return "individualProfile";
+    }
 
 }
