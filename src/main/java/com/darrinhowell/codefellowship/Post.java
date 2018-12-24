@@ -1,9 +1,6 @@
 package com.darrinhowell.codefellowship;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -14,11 +11,19 @@ public class Post {
     public long id;
     String body;
     Date recordedAt;
-    ApplicationUser author;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    public ApplicationUser user;
+
     public Post() {}
 
     public Post(String body, Date recordedAt) {
         this.body = body;
         this.recordedAt = recordedAt;
+    }
+
+    public String toString() {
+        return this.body;
     }
 }

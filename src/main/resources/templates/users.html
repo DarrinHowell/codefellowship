@@ -7,20 +7,19 @@
     <title>CodeFellowship</title>
 </head>
 <body>
-<header>
-    <div th:replace="common :: nav"></div>
-    <h1>User Profiles</h1>
-</header>
-<main>
-    <ul>
-        <li th:each="profile : ${profiles}">
-            <a th:href="${'users/'+profile.id+'/show'}"><p th:text="${profile.bio}"></p></a>
-        </li>
-    </ul>
+    <header>
+        <div th:replace="common :: nav"></div>
+        <h1>User Profiles</h1>
+    </header>
+    <main>
+        <ul>
+            <li th:each="profile : ${profiles}">
+                <a th:href="${'users/'+profile.id+'/show'}"><p th:text="${profile.bio}"></p></a>
+            </li>
+        </ul>
+    </main>
+    <footer>
 
-</main>
-<footer>
-
-</footer>
+    </footer>
 </body>
 </html>

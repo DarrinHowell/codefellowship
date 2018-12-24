@@ -23,6 +23,12 @@
             <li th:text="${profile.bio}"></li>
         </ul>
 
+        <form th:action="${'/blogPost/' + profile.id}" method="post">
+            <label for="blogPostBody">Blog Post:</label>
+            <input type="text" name="blogPostBody" id="blogPostBody">
+            <input type="submit">
+        </form>
+
     </main>
     <footer>
 

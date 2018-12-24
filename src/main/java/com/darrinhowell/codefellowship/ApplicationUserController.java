@@ -1,6 +1,7 @@
 package com.darrinhowell.codefellowship;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,14 +13,25 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Controller
 public class ApplicationUserController {
+
+    ///////////////////////////////// -- Controller instance variables
+
     @Autowired
     public ApplicationUserRepository appUserRepo;
 
     @Autowired
+    public PostRepository userPostRepo;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
+    ///////////////////////////////// -- Routes
+
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showSplash(){
@@ -63,6 +75,23 @@ public class ApplicationUserController {
         appUserRepo.save(newUser);
         return new RedirectView("/");
     }
-    
 
+    @GetMapping("/myProfile")
+    public String loadUserProfile(Principal p, Model m){
+        m.addAttribute("profile", ((UsernamePasswordAuthenticationToken)p).getPrincipal());
+        return "individualProfile";
+    }
+
+    @RequestMapping(value = "/blogPost/{userId}", method = RequestMethod.POST)
+    public RedirectView createPost(@PathVariable long userId, @RequestParam String blogPostBody) {
+        Post newPost = new Post(blogPostBody, new Date());
+        newPost.user = appUserRepo.findById(userId).get();
+        userPostRepo.save(newPost);
+
+        ApplicationUser currentUser = appUserRepo.findById(userId).get();
+        for(Post post : currentUser.postSet)
+        System.out.println(post);
+
+        return new RedirectView("/");
+    }
 }
