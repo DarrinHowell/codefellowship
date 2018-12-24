@@ -51,8 +51,18 @@ public class ApplicationUserController {
     }
 
     @RequestMapping(value = "/users/{profileId}/show", method = RequestMethod.GET)
-    public String getProfiles(@PathVariable long profileId, Model m){
+    public String getProfiles(@PathVariable long profileId, Model m, Principal p){
+
+        ApplicationUser currentUser = appUserRepo.findByUsername(p.getName());
+
+        System.out.println("This is the profileID" + profileId);
+        System.out.println("This is the principleID" + currentUser.id);
+
         m.addAttribute("profile", appUserRepo.findById(profileId).get());
+        m.addAttribute("profileID", profileId);
+        m.addAttribute("principleID", currentUser.id);
+
+
         return "individualProfile";
     }
 
@@ -82,6 +92,7 @@ public class ApplicationUserController {
         ApplicationUser currentUser = appUserRepo.findByUsername(p.getName());
         m.addAttribute("profile", ((UsernamePasswordAuthenticationToken)p).getPrincipal());
         m.addAttribute("posts", currentUser.postSet);
+        m.addAttribute("principleID", currentUser.id);
 
         return "individualProfile";
     }
@@ -91,6 +102,6 @@ public class ApplicationUserController {
         Post newPost = new Post(blogPostBody, new Date());
         newPost.user = appUserRepo.findById(userId).get();
         userPostRepo.save(newPost);
-        return new RedirectView("/myProfile");
+        return new RedirectView("/myProfile/" + userId + "/show");
     }
 }
