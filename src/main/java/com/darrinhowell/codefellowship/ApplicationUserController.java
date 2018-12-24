@@ -78,7 +78,11 @@ public class ApplicationUserController {
 
     @GetMapping("/myProfile")
     public String loadUserProfile(Principal p, Model m){
+
+        ApplicationUser currentUser = appUserRepo.findByUsername(p.getName());
         m.addAttribute("profile", ((UsernamePasswordAuthenticationToken)p).getPrincipal());
+        m.addAttribute("posts", currentUser.postSet);
+
         return "individualProfile";
     }
 
@@ -87,11 +91,6 @@ public class ApplicationUserController {
         Post newPost = new Post(blogPostBody, new Date());
         newPost.user = appUserRepo.findById(userId).get();
         userPostRepo.save(newPost);
-
-        ApplicationUser currentUser = appUserRepo.findById(userId).get();
-        for(Post post : currentUser.postSet)
-        System.out.println(post);
-
-        return new RedirectView("/");
+        return new RedirectView("/myProfile");
     }
 }

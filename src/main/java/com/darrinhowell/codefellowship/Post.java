@@ -9,8 +9,8 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
-    String body;
-    Date recordedAt;
+    public String body;
+    public Date recordedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
