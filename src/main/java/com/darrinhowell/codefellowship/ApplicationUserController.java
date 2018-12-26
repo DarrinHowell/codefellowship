@@ -54,9 +54,6 @@ public class ApplicationUserController {
 
         ApplicationUser currentUser = appUserRepo.findByUsername(p.getName());
 
-        System.out.println("This is the profileID" + profileId);
-        System.out.println("This is the principleID" + currentUser.id);
-
         m.addAttribute("profile", appUserRepo.findById(profileId).get());
         m.addAttribute("principleID", currentUser.id);
         m.addAttribute("posts", appUserRepo.findById(profileId).get().postSet);
@@ -97,9 +94,23 @@ public class ApplicationUserController {
 
     @RequestMapping(value = "/blogPost/{userId}", method = RequestMethod.POST)
     public RedirectView createPost(@PathVariable long userId, @RequestParam String blogPostBody) {
-        Post newPost = new Post(blogPostBody, new Date());
-        newPost.user = appUserRepo.findById(userId).get();
-        userPostRepo.save(newPost);
-        return new RedirectView("/users/" + userId + "/show");
+
+        if(blogPostBody.toUpperCase().contains("DROP TABLE") ||
+                blogPostBody.toUpperCase().contains("UNION SELECT USERNAME, PASSWORD") ||
+                blogPostBody.toUpperCase().contains("<SCRIPT>") ||
+                blogPostBody.toUpperCase().contains("</SCRIPT>")){
+            return new RedirectView("/securityCheck");
+
+        } else {
+            Post newPost = new Post(blogPostBody, new Date());
+            newPost.user = appUserRepo.findById(userId).get();
+            userPostRepo.save(newPost);
+            return new RedirectView("/users/" + userId + "/show");
+        }
+    }
+
+    @GetMapping("/securityCheck")
+    public String securityWarning(){
+        return "securityWarning";
     }
 }
