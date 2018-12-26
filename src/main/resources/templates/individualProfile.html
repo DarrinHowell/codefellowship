@@ -23,6 +23,20 @@
             <li th:text="${profile.bio}"></li>
         </ul>
 
+        <form th:if="${principleID == profile.id}" th:action="${'/blogPost/' + profile.id}" method="post">
+            <label for="blogPostBody">Blog Post:</label>
+            <input type="text" name="blogPostBody" id="blogPostBody">
+            <input type="submit">
+        </form>
+
+        <h3>Blog Posts</h3>
+        <ul>
+            <li th:each="post : ${posts}">
+                <p th:text="${post.body}"></p>
+                <p th:text="${post.recordedAt}"></p>
+            </li>
+        </ul>
+
     </main>
     <footer>
 

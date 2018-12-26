@@ -4,8 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class ApplicationUser implements UserDetails {
@@ -19,6 +18,9 @@ public class ApplicationUser implements UserDetails {
     public String lastName;
     public String dateOfBirth;
     public String bio;
+
+    @OneToMany(mappedBy = "user")
+    public List<Post> postSet = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(

@@ -12,14 +12,25 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Controller
 public class ApplicationUserController {
+
+    ///////////////////////////////// -- Controller instance variables
+
     @Autowired
     public ApplicationUserRepository appUserRepo;
 
     @Autowired
+    public PostRepository userPostRepo;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
+    ///////////////////////////////// -- Routes
+
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showSplash(){
@@ -39,8 +50,17 @@ public class ApplicationUserController {
     }
 
     @RequestMapping(value = "/users/{profileId}/show", method = RequestMethod.GET)
-    public String getProfiles(@PathVariable long profileId, Model m){
+    public String getProfiles(@PathVariable long profileId, Model m, Principal p){
+
+        ApplicationUser currentUser = appUserRepo.findByUsername(p.getName());
+
+        System.out.println("This is the profileID" + profileId);
+        System.out.println("This is the principleID" + currentUser.id);
+
         m.addAttribute("profile", appUserRepo.findById(profileId).get());
+        m.addAttribute("principleID", currentUser.id);
+        m.addAttribute("posts", appUserRepo.findById(profileId).get().postSet);
+
         return "individualProfile";
     }
 
@@ -63,6 +83,23 @@ public class ApplicationUserController {
         appUserRepo.save(newUser);
         return new RedirectView("/");
     }
-    
 
+    @GetMapping("/myProfile")
+    public String loadUserProfile(Principal p, Model m){
+
+        ApplicationUser currentUser = appUserRepo.findByUsername(p.getName());
+        m.addAttribute("profile", ((UsernamePasswordAuthenticationToken)p).getPrincipal());
+        m.addAttribute("posts", currentUser.postSet);
+        m.addAttribute("principleID", currentUser.id);
+
+        return "individualProfile";
+    }
+
+    @RequestMapping(value = "/blogPost/{userId}", method = RequestMethod.POST)
+    public RedirectView createPost(@PathVariable long userId, @RequestParam String blogPostBody) {
+        Post newPost = new Post(blogPostBody, new Date());
+        newPost.user = appUserRepo.findById(userId).get();
+        userPostRepo.save(newPost);
+        return new RedirectView("/users/" + userId + "/show");
+    }
 }
