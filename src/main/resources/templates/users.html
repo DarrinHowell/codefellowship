@@ -14,7 +14,7 @@
     <main>
         <ul>
             <li th:each="profile : ${profiles}">
-                <a th:href="${'users/'+profile.id+'/show'}"><p th:text="${profile.bio}"></p></a>
+                <a th:href="${'users/'+profile.id+'/show'}"><p th:text="${profile.username}"></p></a>
             </li>
         </ul>
     </main>

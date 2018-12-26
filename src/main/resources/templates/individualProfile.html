@@ -23,7 +23,7 @@
             <li th:text="${profile.bio}"></li>
         </ul>
 
-        <form th:if="${principleId == profileId}" th:action="${'/blogPost/' + profile.id}" method="post">
+        <form th:if="${principleID == profile.id}" th:action="${'/blogPost/' + profile.id}" method="post">
             <label for="blogPostBody">Blog Post:</label>
             <input type="text" name="blogPostBody" id="blogPostBody">
             <input type="submit">

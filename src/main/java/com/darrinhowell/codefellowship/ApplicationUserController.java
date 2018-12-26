@@ -1,7 +1,6 @@
 package com.darrinhowell.codefellowship;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -59,9 +58,8 @@ public class ApplicationUserController {
         System.out.println("This is the principleID" + currentUser.id);
 
         m.addAttribute("profile", appUserRepo.findById(profileId).get());
-        m.addAttribute("profileID", profileId);
         m.addAttribute("principleID", currentUser.id);
-
+        m.addAttribute("posts", appUserRepo.findById(profileId).get().postSet);
 
         return "individualProfile";
     }
@@ -102,6 +100,6 @@ public class ApplicationUserController {
         Post newPost = new Post(blogPostBody, new Date());
         newPost.user = appUserRepo.findById(userId).get();
         userPostRepo.save(newPost);
-        return new RedirectView("/myProfile/" + userId + "/show");
+        return new RedirectView("/users/" + userId + "/show");
     }
 }
