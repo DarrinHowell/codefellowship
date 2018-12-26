@@ -13,4 +13,6 @@ in users can post to their own page. Logged in users can see blog posts from eve
 on their respective pages, but logged in users can only post to their own pages.
 
 ## Running program
-Open the project in IntelliJ and run the CodeFellowshipApplication class
+There are two options for running this application: <br/> 
+1. Open the project in IntelliJ and run the CodeFellowshipApplication class.
+2. Type this command into the terminal: ./gradlew bootRun 
