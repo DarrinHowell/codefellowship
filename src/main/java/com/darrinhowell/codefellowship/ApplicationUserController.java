@@ -138,9 +138,8 @@ public class ApplicationUserController {
         ApplicationUser currentUser = appUserRepo.findById(principleID).get();
 
         profileUser.followerSet.add(currentUser);
-        profileUser.userBeingFollowed.add(profileUser);
 
-        System.out.println(profileUser.followerSet.size());
+        appUserRepo.save(profileUser);
 
         return new RedirectView("/users/" + profileID + "/show");
     }
