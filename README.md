@@ -22,3 +22,13 @@ see posts from the users that they are following.
 There are two options for running this application: <br/> 
 1. Open the project in IntelliJ and run the CodeFellowshipApplication class.
 2. Type this command into the terminal: ./gradlew bootRun 
+
+This application requires a local PostGreSQL database. In order to connect your local
+psql database on a mac, please provide information with your unique passwords and database 
+names: <br/>
+
+spring.datasource.platform=postgres <br/>
+spring.datasource.url=jdbc:postgresql://localhost:5432/database_name <br/>
+spring.datasource.username=your_psql_userName_here <br/>
+spring.datasource.password=your_psql_password_here <br/>
+spring.jpa.hibernate.ddl-auto=create <br/>
