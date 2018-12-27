@@ -15,6 +15,13 @@
 
         <img src="/ben-sweet-456320-unsplash.jpg"/>
 
+        <form th:if="${principleID != profile.id}" action="/followManager" method="post">
+            <input type="hidden" name="profileID" th:value="${profile.id}">
+            <input type="hidden" name="principleID" th:value="${principleID}">
+            <input type="submit" value="Follow">
+        </form>
+        <span th:text="${numProfileFollowers} + ' followers'"></span>
+
         <ul>
             <li th:text="${profile.username}"></li>
             <li th:text="${profile.firstName}"></li>

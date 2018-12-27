@@ -31,7 +31,7 @@ public class ApplicationUser implements UserDetails {
     Set<ApplicationUser> followerSet;
 
     @ManyToMany(mappedBy = "followerSet")
-    Set<ApplicationUser> userBeingFollowedSet;
+    Set<ApplicationUser> userBeingFollowed;
 
 
     public ApplicationUser (String username, String password, String firstName, String lastName,

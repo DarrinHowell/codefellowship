@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.websocket.server.PathParam;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,10 +54,19 @@ public class ApplicationUserController {
     public String getProfiles(@PathVariable long profileId, Model m, Principal p){
 
         ApplicationUser currentUser = appUserRepo.findByUsername(p.getName());
+        ApplicationUser profileUser = appUserRepo.findById(profileId).get();
 
-        m.addAttribute("profile", appUserRepo.findById(profileId).get());
+        m.addAttribute("profile", profileUser);
+
+        if(profileUser.followerSet == null) {
+            m.addAttribute("numProfileFollowers", 0);
+        } else {
+            m.addAttribute("numProfileFollowers", profileUser.followerSet.size());
+        }
+
         m.addAttribute("principleID", currentUser.id);
         m.addAttribute("posts", appUserRepo.findById(profileId).get().postSet);
+
 
         return "individualProfile";
     }
@@ -86,6 +96,13 @@ public class ApplicationUserController {
 
         ApplicationUser currentUser = appUserRepo.findByUsername(p.getName());
         m.addAttribute("profile", ((UsernamePasswordAuthenticationToken)p).getPrincipal());
+
+        if(currentUser.followerSet == null) {
+            m.addAttribute("numProfileFollowers", 0);
+        } else {
+            m.addAttribute("numProfileFollowers", currentUser.followerSet.size());
+        }
+
         m.addAttribute("posts", currentUser.postSet);
         m.addAttribute("principleID", currentUser.id);
 
@@ -112,5 +129,15 @@ public class ApplicationUserController {
     @GetMapping("/securityCheck")
     public String securityWarning(){
         return "securityWarning";
+    }
+
+    @RequestMapping(value = "/followManager", method = RequestMethod.POST)
+    public RedirectView addFollower(@RequestParam long profileID, @RequestParam long principleID){
+
+        System.out.println("This is the profileID in the likes Manager" + profileID);
+        System.out.println("This is the principleID in the likes Manager" + principleID);
+
+
+        return new RedirectView("/users/" + profileID + "/show");
     }
 }
