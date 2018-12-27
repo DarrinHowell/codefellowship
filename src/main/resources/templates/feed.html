@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="common :: link"></div>
+    <div th:replace="common :: styles"></div>
+    <title>Code Fellowship</title>
+</head>
+<body>
+    <header>
+        <div th:replace="common :: nav"></div>
+        <h1>Friend Feed</h1>
+    </header>
+    <main>
+        <ul th:each="followee: ${followees}">
+            <li><a th:href="${'users/'+followee.id+'/show'}"><h3 th:text="${followee.username}"></h3></a></li>
+            <ul th:each="followee: ${followees}">
+                <li th:each="posts: ${followee.postSet}">
+                    <p th:text="${posts}"></p>
+                </li>
+            </ul>
+        </ul>
+    </main>
+    <footer>
+
+    </footer>
+</body>
+</html>

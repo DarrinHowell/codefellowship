@@ -9,11 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-
-import javax.websocket.server.PathParam;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
 
 @Controller
 public class ApplicationUserController {
@@ -58,10 +57,10 @@ public class ApplicationUserController {
 
         m.addAttribute("profile", profileUser);
 
-        if(profileUser.followerSet == null) {
-            m.addAttribute("numProfileFollowers", 0);
+        if(profileUser.usersIAmFollowing == null) {
+            m.addAttribute("usersIAmFollowing", 0);
         } else {
-            m.addAttribute("numProfileFollowers", profileUser.followerSet.size());
+            m.addAttribute("usersIAmFollowing", profileUser.usersIAmFollowing.size());
         }
 
         m.addAttribute("principleID", currentUser.id);
@@ -97,10 +96,10 @@ public class ApplicationUserController {
         ApplicationUser currentUser = appUserRepo.findByUsername(p.getName());
         m.addAttribute("profile", ((UsernamePasswordAuthenticationToken)p).getPrincipal());
 
-        if(currentUser.followerSet == null) {
-            m.addAttribute("numProfileFollowers", 0);
+        if(currentUser.usersIAmFollowing == null) {
+            m.addAttribute("usersIAmFollowing", 0);
         } else {
-            m.addAttribute("numProfileFollowers", currentUser.followerSet.size());
+            m.addAttribute("usersIAmFollowing", currentUser.usersIAmFollowing.size());
         }
 
         m.addAttribute("posts", currentUser.postSet);
@@ -119,9 +118,16 @@ public class ApplicationUserController {
             return new RedirectView("/securityCheck");
 
         } else {
+            ApplicationUser currentUser = appUserRepo.findById(userId).get();
             Post newPost = new Post(blogPostBody, new Date());
-            newPost.user = appUserRepo.findById(userId).get();
+            newPost.user = currentUser;
             userPostRepo.save(newPost);
+//            appUserRepo.save(currentUser);
+
+            for(int i = 0; i < currentUser.postSet.size(); i++){
+                System.out.println(currentUser.postSet.get(i).body);
+            }
+
             return new RedirectView("/users/" + userId + "/show");
         }
     }
@@ -137,10 +143,24 @@ public class ApplicationUserController {
         ApplicationUser profileUser = appUserRepo.findById(profileID).get();
         ApplicationUser currentUser = appUserRepo.findById(principleID).get();
 
-        profileUser.followerSet.add(currentUser);
+        currentUser.usersIAmFollowing.add(profileUser);
 
-        appUserRepo.save(profileUser);
+        appUserRepo.save(currentUser);
 
         return new RedirectView("/users/" + profileID + "/show");
+    }
+
+    @RequestMapping(value = "/feed", method = RequestMethod.GET)
+    public String loadFeedOfUsersIAmFollowing(Principal p, Model m){
+
+        ApplicationUser currentUser = appUserRepo.findByUsername(p.getName());
+
+        Set<ApplicationUser> followeesSet = currentUser.usersIAmFollowing;
+
+        ApplicationUser[] followeesArr = followeesSet.toArray(new ApplicationUser[followeesSet.size()]);
+
+        m.addAttribute("followees", followeesArr);
+
+        return "feed";
     }
 }

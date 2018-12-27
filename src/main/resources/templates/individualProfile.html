@@ -20,7 +20,7 @@
             <input type="hidden" name="principleID" th:value="${principleID}">
             <input type="submit" value="Follow">
         </form>
-        <span th:text="${numProfileFollowers} + ' followers'"></span>
+        <span th:text="${'following ' + usersIAmFollowing}"></span>
 
         <ul>
             <li th:text="${profile.username}"></li>
