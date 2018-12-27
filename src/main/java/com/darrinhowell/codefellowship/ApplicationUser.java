@@ -22,16 +22,16 @@ public class ApplicationUser implements UserDetails {
     @OneToMany(mappedBy = "user")
     public List<Post> postSet = new ArrayList<>();
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany
     @JoinTable(
-            name = "FollowUserTable",
-            joinColumns = {@JoinColumn(name = "follower")},
-            inverseJoinColumns = {@JoinColumn(name = "userBeingFollowed")}
+            name = "follow_user_table",
+            joinColumns = {@JoinColumn(name = "follower_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_being_followed_id")}
     )
-    Set<ApplicationUser> followerSet;
+    public Set<ApplicationUser> followerSet;
 
     @ManyToMany(mappedBy = "followerSet")
-    Set<ApplicationUser> userBeingFollowedSet;
+    public Set<ApplicationUser> userBeingFollowed;
 
 
     public ApplicationUser (String username, String password, String firstName, String lastName,

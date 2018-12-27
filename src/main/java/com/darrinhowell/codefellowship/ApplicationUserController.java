@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.websocket.server.PathParam;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,19 +54,25 @@ public class ApplicationUserController {
     public String getProfiles(@PathVariable long profileId, Model m, Principal p){
 
         ApplicationUser currentUser = appUserRepo.findByUsername(p.getName());
+        ApplicationUser profileUser = appUserRepo.findById(profileId).get();
 
-        System.out.println("This is the profileID" + profileId);
-        System.out.println("This is the principleID" + currentUser.id);
+        m.addAttribute("profile", profileUser);
 
-        m.addAttribute("profile", appUserRepo.findById(profileId).get());
+        if(profileUser.followerSet == null) {
+            m.addAttribute("numProfileFollowers", 0);
+        } else {
+            m.addAttribute("numProfileFollowers", profileUser.followerSet.size());
+        }
+
         m.addAttribute("principleID", currentUser.id);
         m.addAttribute("posts", appUserRepo.findById(profileId).get().postSet);
+
 
         return "individualProfile";
     }
 
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/newUsers", method = RequestMethod.POST)
     public RedirectView addUsers(@RequestParam String username,
                                  @RequestParam String password,
                                  @RequestParam String firstName,
@@ -89,6 +96,13 @@ public class ApplicationUserController {
 
         ApplicationUser currentUser = appUserRepo.findByUsername(p.getName());
         m.addAttribute("profile", ((UsernamePasswordAuthenticationToken)p).getPrincipal());
+
+        if(currentUser.followerSet == null) {
+            m.addAttribute("numProfileFollowers", 0);
+        } else {
+            m.addAttribute("numProfileFollowers", currentUser.followerSet.size());
+        }
+
         m.addAttribute("posts", currentUser.postSet);
         m.addAttribute("principleID", currentUser.id);
 
@@ -97,9 +111,36 @@ public class ApplicationUserController {
 
     @RequestMapping(value = "/blogPost/{userId}", method = RequestMethod.POST)
     public RedirectView createPost(@PathVariable long userId, @RequestParam String blogPostBody) {
-        Post newPost = new Post(blogPostBody, new Date());
-        newPost.user = appUserRepo.findById(userId).get();
-        userPostRepo.save(newPost);
-        return new RedirectView("/users/" + userId + "/show");
+
+        if(blogPostBody.toUpperCase().contains("DROP TABLE") ||
+                blogPostBody.toUpperCase().contains("UNION SELECT USERNAME, PASSWORD") ||
+                blogPostBody.toUpperCase().contains("<SCRIPT>") ||
+                blogPostBody.toUpperCase().contains("</SCRIPT>")){
+            return new RedirectView("/securityCheck");
+
+        } else {
+            Post newPost = new Post(blogPostBody, new Date());
+            newPost.user = appUserRepo.findById(userId).get();
+            userPostRepo.save(newPost);
+            return new RedirectView("/users/" + userId + "/show");
+        }
+    }
+
+    @GetMapping("/securityCheck")
+    public String securityWarning(){
+        return "securityWarning";
+    }
+
+    @RequestMapping(value = "/followManager", method = RequestMethod.POST)
+    public RedirectView addFollower(@RequestParam long profileID, @RequestParam long principleID){
+
+        ApplicationUser profileUser = appUserRepo.findById(profileID).get();
+        ApplicationUser currentUser = appUserRepo.findById(principleID).get();
+
+        profileUser.followerSet.add(currentUser);
+
+        appUserRepo.save(profileUser);
+
+        return new RedirectView("/users/" + profileID + "/show");
     }
 }
