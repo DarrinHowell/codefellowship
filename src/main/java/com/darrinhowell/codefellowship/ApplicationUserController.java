@@ -72,7 +72,7 @@ public class ApplicationUserController {
     }
 
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/newUsers", method = RequestMethod.POST)
     public RedirectView addUsers(@RequestParam String username,
                                  @RequestParam String password,
                                  @RequestParam String firstName,
@@ -134,9 +134,13 @@ public class ApplicationUserController {
     @RequestMapping(value = "/followManager", method = RequestMethod.POST)
     public RedirectView addFollower(@RequestParam long profileID, @RequestParam long principleID){
 
-        System.out.println("This is the profileID in the likes Manager" + profileID);
-        System.out.println("This is the principleID in the likes Manager" + principleID);
+        ApplicationUser profileUser = appUserRepo.findById(profileID).get();
+        ApplicationUser currentUser = appUserRepo.findById(principleID).get();
 
+        profileUser.followerSet.add(currentUser);
+        profileUser.userBeingFollowed.add(profileUser);
+
+        System.out.println(profileUser.followerSet.size());
 
         return new RedirectView("/users/" + profileID + "/show");
     }
