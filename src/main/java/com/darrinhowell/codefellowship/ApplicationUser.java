@@ -26,12 +26,12 @@ public class ApplicationUser implements UserDetails {
     @JoinTable(
             name = "follow_user_table",
             joinColumns = {@JoinColumn(name = "follower_id")},
-            inverseJoinColumns = {@JoinColumn(name = "user_being_followed_id")}
+            inverseJoinColumns = {@JoinColumn(name = "users_i_am_following")}
     )
-    public Set<ApplicationUser> followerSet;
+    public Set<ApplicationUser> usersIAmFollowing;
 
-    @ManyToMany(mappedBy = "followerSet")
-    public Set<ApplicationUser> userBeingFollowed;
+    @ManyToMany(mappedBy = "usersIAmFollowing")
+    public Set<ApplicationUser> follower;
 
 
     public ApplicationUser (String username, String password, String firstName, String lastName,
